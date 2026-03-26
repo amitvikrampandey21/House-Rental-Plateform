@@ -1,0 +1,45 @@
+services:
+  - type: pserv
+    name: staysphere-mongo
+    runtime: docker
+    plan: starter
+    region: singapore
+    dockerfilePath: ./mongodb/Dockerfile
+    disk:
+      name: staysphere-mongo-data
+      mountPath: /data/db
+      sizeGB: 10
+
+  - type: web
+    name: staysphere-app
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm install && npm run build:render
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: MONGO_HOST
+        fromService:
+          type: pserv
+          name: staysphere-mongo
+          property: host
+      - key: MONGO_PORT
+        fromService:
+          type: pserv
+          name: staysphere-mongo
+          property: port
+      - key: MONGO_DB_NAME
+        value: house-rental-platform
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 7d
+      - key: ADMIN_EMAIL
+        value: admin@example.com
+      - key: ADMIN_PASSWORD
+        sync: false
