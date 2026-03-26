@@ -15,6 +15,7 @@ import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const frontendDistPath = path.resolve(__dirname, "../../frontend/dist");
+const hasFrontendBuild = fs.existsSync(frontendDistPath);
 const allowedOrigins = [process.env.CLIENT_URL, "http://localhost:5173"].filter(Boolean);
 
 app.use(
@@ -44,7 +45,7 @@ app.use("/api/dashboard", dashboardRoutes);
 app.use("/api/uploads", uploadRoutes);
 app.use("/api/admin", adminRoutes);
 
-if (process.env.NODE_ENV === "production" && fs.existsSync(frontendDistPath)) {
+if (hasFrontendBuild) {
   app.use(express.static(frontendDistPath));
 
   app.get("*", (req, res, next) => {
