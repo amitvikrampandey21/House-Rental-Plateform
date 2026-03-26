@@ -14,8 +14,12 @@ import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const frontendDistPath = path.resolve(__dirname, "../../frontend/dist");
-const hasFrontendBuild = fs.existsSync(frontendDistPath);
+const frontendBuildCandidates = [
+  path.resolve(__dirname, "../dist"),
+  path.resolve(__dirname, "../../frontend/dist")
+];
+const frontendDistPath = frontendBuildCandidates.find((candidate) => fs.existsSync(candidate));
+const hasFrontendBuild = Boolean(frontendDistPath);
 const allowedOrigins = [process.env.CLIENT_URL, "http://localhost:5173"].filter(Boolean);
 
 app.use(
