@@ -225,29 +225,34 @@ Check these in production:
 
 ## Single Platform Render Deploy
 
-If you want to keep the whole app on Render, this repo now supports a single public web service for the app plus a private MongoDB service inside the same Render Blueprint.
+If you want to keep the whole app on Render, this repo supports a single public web service for the app, with MongoDB hosted on MongoDB Atlas.
 
-Files added for this flow:
+File used for this flow:
 
 - [`render.yaml`](/c:/Users/Amit%20Pandey/OneDrive/Desktop/House%20rental%20Platform/render.yaml)
-- [`mongodb/Dockerfile`](/c:/Users/Amit%20Pandey/OneDrive/Desktop/House%20rental%20Platform/mongodb/Dockerfile)
 
 How it works:
 
 - Render builds the React frontend from `frontend`
 - The Express backend serves the built frontend in production
-- A private MongoDB service runs inside Render and is wired through `MONGO_HOST` and `MONGO_PORT`
+- MongoDB Atlas is connected through the `MONGO_URI` environment variable
 
 Render setup:
 
 1. Push this repo to GitHub.
 2. In Render, choose `New` -> `Blueprint`.
 3. Select this repo.
-4. Render will detect `render.yaml` and create:
-   - one web service for the full app
-   - one private service for MongoDB
-5. Set `ADMIN_PASSWORD` to your own value before deploy.
-6. After deploy, open the app URL from the web service.
+4. Render will detect `render.yaml` and create one web service for the full app.
+5. In the new service, set:
+   - `MONGO_URI` to your full MongoDB Atlas connection string
+   - `CLIENT_URL` to your final Render app URL after the first deploy
+   - `ADMIN_PASSWORD` to your own value
+6. Redeploy once `CLIENT_URL` is set so production CORS matches the live app URL.
+
+Important:
+
+- Replace `<db_password>` in your Atlas URI with the actual database user password before saving it in Render.
+- Do not commit the real MongoDB URI into the repository.
 
 The app health endpoint will be:
 
