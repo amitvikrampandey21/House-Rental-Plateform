@@ -1,4 +1,4 @@
-import { ArrowRightIcon, BuildingOffice2Icon, MapIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { ArrowRightIcon, BuildingOffice2Icon, MapPinIcon, SparklesIcon } from "@heroicons/react/24/outline";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import client from "../api/client";
@@ -124,7 +124,7 @@ const HomePage = () => {
                   <p className="mt-2 text-sm text-slate-300">Add listings, handle requests, and update inventory fast.</p>
                 </div>
                 <div className="rounded-[24px] bg-white/10 p-4">
-                  <MapIcon className="h-6 w-6 text-brand-300" />
+                  <MapPinIcon className="h-6 w-6 text-brand-300" />
                   <p className="mt-3 font-semibold">Map-aware browsing</p>
                   <p className="mt-2 text-sm text-slate-300">Filter by neighborhood and view local context instantly.</p>
                 </div>
